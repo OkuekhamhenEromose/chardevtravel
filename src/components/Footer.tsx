@@ -1,5 +1,6 @@
 import { motion, Variants } from 'framer-motion';
 import { Mountain, Facebook, Instagram, Twitter, Linkedin, MapPin, Phone, Mail, Heart, ArrowUp } from 'lucide-react';
+import { HiArrowRight } from 'react-icons/hi';
 
 const Footer = () => {
   const scrollToTop = () => {
@@ -44,6 +45,41 @@ const Footer = () => {
       transition: { duration: 0.3 }
     }
   };
+
+  const fadeIn = (direction: string, delay: number) => ({
+    hidden: {
+      y: direction === 'up' ? 40 : direction === 'down' ? -40 : 0,
+      x: direction === 'left' ? 40 : direction === 'right' ? -40 : 0,
+      opacity: 0
+    },
+    show: {
+      y: 0,
+      x: 0,
+      opacity: 1,
+      transition: {
+        type: 'tween',
+        duration: 0.8,
+        delay,
+        ease: [0.25, 0.25, 0.25, 0.75]
+      }
+    }
+  });
+
+  const textVariant = (delay: number) => ({
+    hidden: {
+      y: 50,
+      opacity: 0
+    },
+    show: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        type: 'spring',
+        duration: 1.25,
+        delay
+      }
+    }
+  });
 
   const quickLinks = [
     { name: 'About Us', href: '#about' },
@@ -94,6 +130,64 @@ const Footer = () => {
         }}
       />
 
+      {/* Newsletter Section */}
+      <motion.div 
+        variants={fadeIn('up', 0.2)}
+        initial="hidden"
+        whileInView="show"
+        className="bg-blue-600 relative z-10"
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+          <div className="flex flex-col lg:flex-row items-center justify-between gap-8 md:gap-12">
+            {/* Left Content */}
+            <motion.div 
+              variants={fadeIn('right', 0.5)}
+              className="text-white max-w-lg text-center md:text-left"
+            >
+              <motion.h2 
+                variants={textVariant(0.3)}
+                className="text-2xl sm:text-3xl md:text-4xl font-medium mb-4"
+              >
+                Get Travel Updates
+              </motion.h2>
+              <motion.p 
+                variants={fadeIn('up', 0.6)}
+                className="text-blue-100 text-sm sm:text-base"
+              >
+                Subscribe to our newsletter for exclusive deals, travel tips, and inspiration for your next adventure.
+              </motion.p>
+            </motion.div>
+
+            {/* Email Form */}
+            <motion.div 
+              variants={fadeIn('left', 0.5)}
+              className="w-full md:w-auto"
+            >
+              <motion.div 
+                variants={fadeIn('up', 0.6)}
+                className="flex flex-col sm:flex-row gap-4 sm:gap-0"
+              >
+                <motion.input
+                  variants={fadeIn('right', 0.7)}
+                  type="email"
+                  placeholder="Enter your email address"
+                  className="w-full sm:w-auto md:w-80 px-4 sm:px-6 py-3 sm:py-4 rounded-xl sm:rounded-l-xl sm:rounded-r-none focus:outline-none focus:ring-2 focus:ring-sky-500 bg-white"
+                />
+                <motion.button 
+                  variants={fadeIn('left', 0.7)}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="w-full sm:w-auto cursor-pointer bg-sky-500 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl sm:rounded-l-none sm:rounded-r-xl hover:bg-sky-600 transition-colors flex items-center justify-center sm:justify-start gap-2"
+                >
+                  <span>Subscribe</span>
+                  <HiArrowRight className="w-5 h-5" />
+                </motion.button>
+              </motion.div>
+            </motion.div>
+          </div>
+        </div>
+      </motion.div>
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 relative z-10">
         <motion.div
           variants={containerVariants}
@@ -117,7 +211,7 @@ const Footer = () => {
                 >
                   <Mountain className="w-10 h-10 text-sky-400" />
                 </motion.div>
-                <span className="text-3xl font-bold">Wanderlust</span>
+                <span className="text-3xl font-bold">ChTravel</span>
               </motion.div>
               <motion.p 
                 className="text-gray-300 leading-relaxed max-w-md text-lg"
@@ -184,73 +278,23 @@ const Footer = () => {
                 })}
               </div>
             </motion.div>
-
-            {/* Quick Links */}
-            <motion.div 
-              className="grid grid-cols-2 gap-8"
-              variants={containerVariants}
-            >
-              <div>
-                <motion.h4 
-                  className="text-lg font-semibold mb-4 text-sky-400"
-                  variants={itemVariants}
-                >
-                  Company
-                </motion.h4>
-                <ul className="space-y-3">
-                  {quickLinks.map((link, index) => (
-                    <motion.li key={index} variants={itemVariants}>
-                      <motion.a
-                        href={link.href}
-                        className="text-gray-300 transition-colors duration-300 block"
-                        variants={linkVariants}
-                        whileHover="hover"
-                      >
-                        {link.name}
-                      </motion.a>
-                    </motion.li>
-                  ))}
-                </ul>
-              </div>
-              <div>
-                <motion.h4 
-                  className="text-lg font-semibold mb-4 text-sky-400"
-                  variants={itemVariants}
-                >
-                  Services
-                </motion.h4>
-                <ul className="space-y-3">
-                  {services.map((service, index) => (
-                    <motion.li key={index} variants={itemVariants}>
-                      <motion.a
-                        href={service.href}
-                        className="text-gray-300 transition-colors duration-300 block"
-                        variants={linkVariants}
-                        whileHover="hover"
-                      >
-                        {service.name}
-                      </motion.a>
-                    </motion.li>
-                  ))}
-                </ul>
-              </div>
-            </motion.div>
           </motion.div>
 
-          {/* Right Side - Image */}
+          {/* Right Side - Image and Quick Links */}
           <motion.div 
             variants={itemVariants}
-            className="flex justify-end"
+            className="flex flex-col"
           >
+            {/* Image */}
             <motion.div 
-              className="relative max-w-md w-full"
+              className="relative h-full min-h-[400px] lg:min-h-[500px]"
               whileHover={{ scale: 1.02 }}
               transition={{ duration: 0.3 }}
             >
               <motion.img
                 src="https://images.pexels.com/photos/2265876/pexels-photo-2265876.jpeg?auto=compress&cs=tinysrgb&w=600"
                 alt="Travel inspiration"
-                className="w-full h-80 object-cover rounded-3xl shadow-2xl"
+                className="w-full h-full object-cover rounded-3xl shadow-2xl"
                 whileHover={{ scale: 1.05 }}
                 transition={{ duration: 0.6 }}
               />
@@ -269,20 +313,45 @@ const Footer = () => {
                 <h4 className="text-2xl font-bold mb-2">Start Your Journey Today</h4>
                 <p className="text-white/90 text-lg">The world is waiting for you.</p>
               </motion.div>
-
-              {/* Floating CTA */}
-              <motion.button
-                className="absolute top-6 right-6 bg-white/20 backdrop-blur-sm text-white p-3 rounded-full border border-white/30"
-                whileHover={{ 
-                  scale: 1.1,
-                  backgroundColor: "rgba(255,255,255,0.3)"
-                }}
-                whileTap={{ scale: 0.95 }}
-                onClick={scrollToTop}
-              >
-                <ArrowUp className="w-6 h-6" />
-              </motion.button>
             </motion.div>
+
+            {/* Quick Links below the image on mobile */}
+            <div className="lg:hidden mt-8 grid grid-cols-2 gap-8">
+              <div>
+                <h4 className="text-lg font-semibold mb-4 text-sky-400">Company</h4>
+                <ul className="space-y-3">
+                  {quickLinks.map((link, index) => (
+                    <motion.li key={index} variants={itemVariants}>
+                      <motion.a
+                        href={link.href}
+                        className="text-gray-300 transition-colors duration-300 block"
+                        variants={linkVariants}
+                        whileHover="hover"
+                      >
+                        {link.name}
+                      </motion.a>
+                    </motion.li>
+                  ))}
+                </ul>
+              </div>
+              <div>
+                <h4 className="text-lg font-semibold mb-4 text-sky-400">Services</h4>
+                <ul className="space-y-3">
+                  {services.map((service, index) => (
+                    <motion.li key={index} variants={itemVariants}>
+                      <motion.a
+                        href={service.href}
+                        className="text-gray-300 transition-colors duration-300 block"
+                        variants={linkVariants}
+                        whileHover="hover"
+                      >
+                        {service.name}
+                      </motion.a>
+                    </motion.li>
+                  ))}
+                </ul>
+              </div>
+            </div>
           </motion.div>
         </motion.div>
 
@@ -298,7 +367,7 @@ const Footer = () => {
               className="text-gray-400 text-sm flex items-center"
               whileHover={{ color: "#0ea5e9" }}
             >
-              © 2024 Wanderlust Travel Agency. Made with{' '}
+              © 2025 ChTravel Travel Agency. Made with{' '}
               <motion.span
                 animate={{ scale: [1, 1.2, 1] }}
                 transition={{ duration: 1, repeat: Infinity }}
@@ -306,7 +375,7 @@ const Footer = () => {
               >
                 <Heart className="w-4 h-4 text-red-500 fill-current" />
               </motion.span>
-              {' '}for travelers.
+              {' '}from CharDev.
             </motion.p>
             <div className="flex space-x-6 mt-4 md:mt-0">
               {['Privacy Policy', 'Terms of Service', 'Cookie Policy'].map((link, index) => (

@@ -102,8 +102,8 @@ const Header = () => {
       animate="animate"
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         isScrolled 
-          ? 'bg-white/95 backdrop-blur-lg shadow-lg' 
-          : 'bg-white/90 backdrop-blur-md shadow-sm'
+          ? 'backdrop-blur-lg shadow-lg bg-white/80' 
+          : 'bg-transparent'
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -120,14 +120,18 @@ const Header = () => {
               whileHover={{ rotate: 360 }}
               transition={{ duration: 0.6 }}
             >
-              <Mountain className="w-8 h-8 text-sky-500" />
+              <Mountain className={`w-8 h-8 transition-colors duration-500 ${
+                isScrolled ? 'text-sky-600' : 'text-white'
+              }`} />
             </motion.div>
             <motion.span 
-              className="text-2xl font-bold text-gray-900"
+              className={`text-2xl font-bold transition-colors duration-500 ${
+                isScrolled ? 'text-gray-800' : 'text-white'
+              }`}
               whileHover={{ color: "#0ea5e9" }}
               transition={{ duration: 0.3 }}
             >
-              Wanderlust
+              ChTravel
             </motion.span>
           </motion.div>
 
@@ -137,7 +141,9 @@ const Header = () => {
               <motion.a
                 key={item.name}
                 href={item.href}
-                className="text-gray-700 hover:text-sky-500 font-medium transition-colors duration-300 relative"
+                className={`font-bold transition-colors duration-500 relative ${
+                  isScrolled ? 'text-gray-700 hover:text-sky-600' : 'text-white hover:text-sky-300'
+                }`}
                 whileHover={{ y: -2 }}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ 
@@ -173,7 +179,11 @@ const Header = () => {
                   variants={socialItemVariants}
                   whileHover="hover"
                   whileTap="tap"
-                  className="text-gray-600 hover:text-sky-500 transition-colors duration-300 p-2 rounded-full hover:bg-sky-50"
+                  className={`transition-colors duration-500 p-2 rounded-full ${
+                    isScrolled 
+                      ? 'text-gray-700 hover:text-sky-600 hover:bg-gray-100' 
+                      : 'text-white hover:text-sky-300 hover:bg-white/10'
+                  }`}
                 >
                   <Icon className="w-5 h-5" />
                 </motion.a>
@@ -197,7 +207,9 @@ const Header = () => {
                     exit={{ rotate: 90, opacity: 0 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <X className="w-6 h-6 text-gray-700" />
+                    <X className={`w-6 h-6 ${
+                      isScrolled ? 'text-gray-700' : 'text-white'
+                    }`} />
                   </motion.div>
                 ) : (
                   <motion.div
@@ -207,7 +219,9 @@ const Header = () => {
                     exit={{ rotate: -90, opacity: 0 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <Menu className="w-6 h-6 text-gray-700" />
+                    <Menu className={`w-6 h-6 ${
+                      isScrolled ? 'text-gray-700' : 'text-white'
+                    }`} />
                   </motion.div>
                 )}
               </AnimatePresence>

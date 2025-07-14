@@ -56,31 +56,12 @@ const destinations = [
     rating: 4.9,
     price: '$2,299',
     category: 'Luxury'
-  },
-  {
-    id: 7,
-    name: 'Paris, France',
-    image: 'https://images.pexels.com/photos/338515/pexels-photo-338515.jpeg?auto=compress&cs=tinysrgb&w=600',
-    description: 'Fall in love with the City of Light, featuring iconic landmarks, world-class cuisine, and romantic Seine river cruises.',
-    rating: 4.8,
-    price: '$1,399',
-    category: 'Romantic'
-  },
-  {
-    id: 8,
-    name: 'Dubai, UAE',
-    image: 'https://images.pexels.com/photos/1470405/pexels-photo-1470405.jpeg?auto=compress&cs=tinysrgb&w=600',
-    description: 'Experience luxury and innovation in this modern desert oasis with towering skyscrapers and golden beaches.',
-    rating: 4.7,
-    price: '$1,699',
-    category: 'Luxury'
   }
 ];
 
 const TopDestinations = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(3);
-  // Removed unused isTransitioning state
   const [likedDestinations, setLikedDestinations] = useState<number[]>([]);
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
@@ -104,16 +85,13 @@ const TopDestinations = () => {
   // Auto-scroll every 4 seconds with smooth transition
   useEffect(() => {
     const interval = setInterval(() => {
-      setTimeout(() => {
-        setCurrentIndex((prevIndex) => {
-          const maxIndex = destinations.length - itemsPerPage;
-          return prevIndex >= maxIndex ? 0 : prevIndex + 1;
-        });
-      }, 300);
+      setCurrentIndex((prevIndex) => 
+        (prevIndex + 1) % destinations.length
+      );
     }, 4000);
 
     return () => clearInterval(interval);
-  }, [itemsPerPage]);
+  }, [destinations.length]);
 
   const getVisibleDestinations = () => {
     const visible = [];
@@ -154,29 +132,27 @@ const TopDestinations = () => {
       }
     }
   };
+
   const slideVariants: Variants = {
-    enter: {
-      x: 300,
+    enter: (direction: number) => ({
+      x: direction > 0 ? 1000 : -1000,
       opacity: 0,
-      scale: 0.8
-    },
+    }),
     center: {
       x: 0,
       opacity: 1,
-      scale: 1,
       transition: {
         duration: 0.7,
         ease: "easeOut"
       }
     },
-    exit: {
-      x: -300,
+    exit: (direction: number) => ({
+      x: direction > 0 ? -1000 : 1000,
       opacity: 0,
-      scale: 0.8,
       transition: {
         duration: 0.5
       }
-    }
+    })
   };
 
   const visibleDestinations = getVisibleDestinations();
@@ -265,9 +241,10 @@ const TopDestinations = () => {
 
           {/* Destinations Container */}
           <div className="relative h-[700px] mt-8 overflow-hidden">
-            <AnimatePresence mode="wait">
+            <AnimatePresence custom={1} mode="wait">
               <motion.div
                 key={currentIndex}
+                custom={1} // Direction (1 for right-to-left)
                 variants={slideVariants}
                 initial="enter"
                 animate="center"
@@ -290,11 +267,11 @@ const TopDestinations = () => {
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: index * 0.1 }}
                     >
-                      <div className="relative overflow-hidden">
+                      <div className="relative overflow-hidden h-72">
                         <motion.img
                           src={destination.image}
                           alt={destination.name}
-                          className="w-full h-72 object-cover"
+                          className="w-full h-full object-cover"
                           whileHover={{ scale: 1.1 }}
                           transition={{ duration: 0.6 }}
                         />
@@ -367,20 +344,12 @@ const TopDestinations = () => {
                         </motion.div>
                       </div>
                       
-                      <motion.div 
-                        className="p-6"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 0.3 + index * 0.1 }}
-                      >
+                      <div className="p-6">
                         <div className="flex items-center mb-3">
                           <MapPin className="w-5 h-5 text-sky-500 mr-2 flex-shrink-0" />
-                          <motion.h3 
-                            className="text-xl font-bold text-gray-900 group-hover:text-sky-500 transition-colors duration-300"
-                            whileHover={{ x: 5 }}
-                          >
+                          <h3 className="text-xl font-bold text-gray-900 group-hover:text-sky-500 transition-colors duration-300">
                             {destination.name}
-                          </motion.h3>
+                          </h3>
                         </div>
                         
                         <p className="text-gray-600 leading-relaxed mb-4 line-clamp-3">
@@ -388,18 +357,10 @@ const TopDestinations = () => {
                         </p>
                         
                         <div className="flex items-center justify-between">
-                          <motion.button 
-                            className="text-sky-500 font-semibold hover:text-sky-600 transition-all duration-300 flex items-center space-x-2"
-                            whileHover={{ x: 5 }}
-                          >
+                          <button className="text-sky-500 font-semibold hover:text-sky-600 transition-all duration-300 flex items-center space-x-2">
                             <span>Learn More</span>
-                            <motion.span
-                              animate={{ x: [0, 5, 0] }}
-                              transition={{ duration: 1.5, repeat: Infinity }}
-                            >
-                              →
-                            </motion.span>
-                          </motion.button>
+                            <span>→</span>
+                          </button>
                           
                           <div className="flex items-center space-x-1">
                             <Star className="w-4 h-4 text-yellow-400 fill-current" />
@@ -408,7 +369,7 @@ const TopDestinations = () => {
                             </span>
                           </div>
                         </div>
-                      </motion.div>
+                      </div>
                     </motion.div>
                   );
                 })}
@@ -429,13 +390,13 @@ const TopDestinations = () => {
               className="bg-gradient-to-r from-sky-400 to-sky-600 h-full rounded-full"
               initial={{ width: "0%" }}
               animate={{ 
-                width: `${((currentIndex + 1) / (destinations.length - itemsPerPage + 1)) * 100}%` 
+                width: `${((currentIndex + 1) / destinations.length) * 100}%` 
               }}
               transition={{ duration: 0.5, ease: "easeOut" }}
             />
           </div>
           <p className="text-center text-sm text-gray-500 mt-2">
-            Destination {currentIndex + 1} of {destinations.length - itemsPerPage + 1}
+            Destination {currentIndex + 1} of {destinations.length}
           </p>
         </motion.div>
 

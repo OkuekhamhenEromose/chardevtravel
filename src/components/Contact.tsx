@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { motion, useInView, Variants } from 'framer-motion';
 import { Calendar, MapPin, Phone, Mail, User, Send, CheckCircle } from 'lucide-react';
+import ContactImg from '../assets/images/travel5.jpg';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -422,7 +423,7 @@ const Contact = () => {
               transition={{ duration: 0.3 }}
             >
               <motion.img
-                src="https://images.pexels.com/photos/1591061/pexels-photo-1591061.jpeg?auto=compress&cs=tinysrgb&w=800"
+                src= {ContactImg}
                 alt="Contact us"
                 className="w-full h-64 object-cover"
                 whileHover={{ scale: 1.1 }}

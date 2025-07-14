@@ -1,6 +1,7 @@
 import { motion, useInView, Variants } from 'framer-motion';
 import { useRef } from 'react';
 import { CheckCircle, Users, Award, Clock } from 'lucide-react';
+import travelImage from '../assets/images/travel4.jpg';
 
 const About = () => {
   const ref = useRef(null);
@@ -69,18 +70,6 @@ const About = () => {
     })
   };
 
-  const statsVariants: Variants = {
-    hidden: { scale: 0 },
-    visible: {
-      scale: 1,
-      transition: {
-        type: "spring",
-        stiffness: 100,
-        damping: 15
-      }
-    }
-  };
-
   const features = [
     {
       icon: Users,
@@ -97,13 +86,6 @@ const About = () => {
       title: "24/7 Support",
       description: "Our dedicated team is always here to ensure your journey is seamless."
     }
-  ];
-
-  const stats = [
-    { number: "50K+", label: "Happy Travelers" },
-    { number: "200+", label: "Destinations" },
-    { number: "15+", label: "Years Experience" },
-    { number: "98%", label: "Satisfaction Rate" }
   ];
 
   return (
@@ -150,7 +132,7 @@ const About = () => {
               transition={{ duration: 0.3 }}
             >
               <img
-                src="https://images.pexels.com/photos/1624438/pexels-photo-1624438.jpeg?auto=compress&cs=tinysrgb&w=800"
+                src={travelImage}
                 alt="Happy man standing on cliff"
                 className="w-full h-96 lg:h-[500px] object-cover rounded-3xl shadow-2xl"
               />
@@ -203,7 +185,7 @@ const About = () => {
           </motion.div>
 
           {/* Content Section */}
-          <motion.div variants={itemVariants} className="space-y-8">
+          <motion.div variants={itemVariants} className="space-y-4">
             <div>
               <motion.h3 
                 className="text-sky-500 font-semibold text-lg mb-2"
@@ -214,7 +196,7 @@ const About = () => {
                 About Wanderlust
               </motion.h3>
               <motion.h2 
-                className="text-4xl lg:text-6xl font-bold text-gray-900 leading-tight mb-6"
+                className="text-3xl lg:text-4xl font-bold text-gray-900 leading-tight"
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
@@ -231,7 +213,7 @@ const About = () => {
             </div>
             
             <motion.p 
-              className="text-gray-600 text-lg leading-relaxed"
+              className="text-gray-800 text-sm leading-relaxed"
               variants={itemVariants}
             >
               For over 15 years, Wanderlust has been crafting extraordinary travel experiences 
@@ -239,70 +221,49 @@ const About = () => {
               telling, filled with authentic moments and breathtaking discoveries.
             </motion.p>
 
-            {/* Features */}
-            <motion.div className="space-y-6">
-              {features.map((feature, index) => {
-                const IconComponent = feature.icon;
-                return (
-                  <motion.div
-                    key={index}
-                    custom={index}
-                    variants={featureVariants}
-                    className="flex items-start space-x-4 group"
-                    whileHover={{ x: 10 }}
-                    transition={{ duration: 0.3 }}
-                  >
+            {/* Features Section */}
+            <div className="space-y-1">
+              <motion.h4 
+                className="text-2xl font-bold text-gray-900"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.5 }}
+              >
+                Why Choose Us
+              </motion.h4>
+              
+              <div className="space-y-1">
+                {features.map((feature, index) => {
+                  const IconComponent = feature.icon;
+                  return (
                     <motion.div
-                      className="w-12 h-12 bg-gradient-to-br from-sky-100 to-sky-200 rounded-xl flex items-center justify-center group-hover:from-sky-200 group-hover:to-sky-300 transition-all duration-300"
-                      whileHover={{ scale: 1.1, rotate: 5 }}
+                      key={index}
+                      custom={index}
+                      variants={featureVariants}
+                      className="flex items-start space-x-3 group"
+                      whileHover={{ x: 10 }}
+                      transition={{ duration: 0.3 }}
                     >
-                      <IconComponent className="w-6 h-6 text-sky-600" />
+                      <motion.div
+                        className="w-12 h-12 bg-gradient-to-br from-sky-100 to-sky-200 rounded-xl flex items-center justify-center group-hover:from-sky-200 group-hover:to-sky-300 transition-all duration-300"
+                        whileHover={{ scale: 1.1, rotate: 5 }}
+                      >
+                        <IconComponent className="w-6 h-6 text-sky-600" />
+                      </motion.div>
+                      <div>
+                        <h4 className="font-semibold text-gray-900 text-lg group-hover:text-sky-600 transition-colors duration-300">
+                          {feature.title}
+                        </h4>
+                        <p className="text-gray-800 leading-relaxed">{feature.description}</p>
+                      </div>
                     </motion.div>
-                    <div>
-                      <h4 className="font-semibold text-gray-900 mb-2 text-lg group-hover:text-sky-600 transition-colors duration-300">
-                        {feature.title}
-                      </h4>
-                      <p className="text-gray-600 leading-relaxed">{feature.description}</p>
-                    </div>
-                  </motion.div>
-                );
-              })}
-            </motion.div>
-
-            {/* Stats Grid */}
-            <motion.div 
-              className="grid grid-cols-2 gap-6 pt-8"
-              variants={containerVariants}
-            >
-              {stats.map((stat, index) => (
-                <motion.div
-                  key={index}
-                  variants={statsVariants}
-                  className="text-center p-4 bg-white/60 backdrop-blur-sm rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300"
-                  whileHover={{ 
-                    scale: 1.05,
-                    backgroundColor: "rgba(255,255,255,0.8)"
-                  }}
-                >
-                  <motion.div
-                    className="text-3xl font-bold text-sky-600 mb-1"
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{ 
-                      delay: 1 + index * 0.1,
-                      type: "spring",
-                      stiffness: 200
-                    }}
-                  >
-                    {stat.number}
-                  </motion.div>
-                  <div className="text-gray-600 font-medium">{stat.label}</div>
-                </motion.div>
-              ))}
-            </motion.div>
+                  );
+                })}
+              </div>
+            </div>
 
             <motion.button 
-              className="bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-600 hover:to-blue-700 text-white px-8 py-4 rounded-full font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-300"
+              className="bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-600 hover:to-blue-700 text-white px-8 py-4 rounded-full font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer"
               variants={itemVariants}
               whileHover={{ 
                 scale: 1.05,

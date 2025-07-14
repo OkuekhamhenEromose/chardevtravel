@@ -256,7 +256,7 @@ const Hero = () => {
       {/* Navigation Arrows */}
       <motion.button
         onClick={prevSlide}
-        className="absolute left-6 top-1/2 transform -translate-y-1/2 z-20 bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white p-4 rounded-full transition-all duration-300 border border-white/20"
+        className="absolute left-6 top-1/2 transform -translate-y-1/2 z-20 hover:bg-white/20 text-white p-4 rounded-full backdrop-blur-sm transition-all duration-300 border border-white/20 cursor-pointer"
         whileHover={{ scale: 1.1, x: -5 }}
         whileTap={{ scale: 0.95 }}
         initial={{ opacity: 0, x: -50 }}

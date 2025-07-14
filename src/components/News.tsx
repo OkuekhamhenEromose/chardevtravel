@@ -41,7 +41,7 @@ const newsArticles = [
     title: 'Luxury Train Journeys Around the World',
     image: 'https://images.pexels.com/photos/1236701/pexels-photo-1236701.jpeg?auto=compress&cs=tinysrgb&w=600',
     date: 'March 3, 2024',
-    excerpt: 'Experience the golden age of travel with these spectacular luxury train routes.'
+    excerpt: 'Experience the golden age of travel with these spectacular luxury train routes through the cities'
   }
 ];
 
@@ -50,7 +50,7 @@ const News = () => {
     <section className="py-20 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="text-center mb-16">
+        <div className="text-center mb-8">
           <h3 className="text-sky-500 font-semibold text-lg mb-2">Stay Informed</h3>
           <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
             News & Blog
@@ -83,7 +83,7 @@ const News = () => {
               </div>
 
               {/* Content */}
-              <div className="p-6">
+              <div className="p-4">
                 <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-sky-500 transition-colors duration-300">
                   {article.title}
                 </h3>

@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence, useInView, Variants } from 'framer-motion';
-import { Mountain, Waves, Camera, Utensils, Compass, Plane, ArrowRight, Star } from 'lucide-react';
+import { Mountain, Waves, Camera, Utensils, Compass, Plane, ArrowRight, Star, Sun } from 'lucide-react';
 
 const activities = [
   {
@@ -62,7 +62,17 @@ const activities = [
     highlights: ['Private Yacht Charters', 'Helicopter Tours', 'Luxury Spa Retreats', 'VIP Experiences'],
     color: 'from-indigo-500 to-purple-600',
     bgColor: 'from-indigo-50 to-purple-50'
-  }
+  },
+  {
+    id: 6,
+    name: 'Luxury Experiences',
+    icon: Sun,
+    description: 'Indulge in the finest luxury experiences with our premium offerings. From private yacht charters and helicopter tours to exclusive spa retreats and VIP access to world-class events, enjoy unparalleled comfort and sophistication.',
+    image: 'https://images.pexels.com/photos/1591061/pexels-photo-1591061.jpeg?auto=compress&cs=tinysrgb&w=800',
+    highlights: ['Private Yacht Charters', 'Helicopter Tours', 'Luxury Spa Retreats', 'VIP Experiences'],
+    color: 'from-yellow-500 to-red-600',
+    bgColor: 'from-yellow-50 to-red-50'
+  },
 ];
 
 const Activities = () => {
@@ -151,13 +161,13 @@ const Activities = () => {
         }}
       />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <motion.div
           variants={containerVariants}
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
-          className="text-center mb-16"
+          className="text-center mb-8"
         >
           <motion.h3 
             variants={headerVariants}
@@ -225,7 +235,7 @@ const Activities = () => {
                     }}
                     transition={{ duration: 0.8 }}
                   >
-                    <div className="w-full h-full bg-white/20 rounded-full blur-3xl" />
+                    <div className="w-full h-auto bg-white/20 rounded-full blur-3xl" />
                   </motion.div>
 
                   <div className="flex items-center space-x-4 relative z-10">
@@ -254,7 +264,7 @@ const Activities = () => {
                         {activity.name}
                       </motion.h3>
                       <motion.p 
-                        className={`text-sm ${
+                        className={`text-sm text-gray-950 font-semibold ${
                           isSelected ? 'text-white/80' : 'text-gray-600'
                         }`}
                         initial={{ opacity: 0.7 }}
@@ -285,7 +295,7 @@ const Activities = () => {
 
           {/* Right Side - Description and Image */}
           <motion.div 
-            className="space-y-8"
+            className="space-y-2"
             variants={contentVariants}
             initial="hidden"
             animate={isInView ? "visible" : "hidden"}
@@ -299,7 +309,7 @@ const Activities = () => {
                 transition={{ duration: 0.5 }}
                 className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl p-8 border border-white/20"
               >
-                <div className="flex items-center space-x-4 mb-6">
+                <div className="flex items-center space-x-4 mb-2">
                   <motion.div
                     className={`p-3 rounded-xl bg-gradient-to-br ${selectedActivity.color}`}
                     whileHover={{ rotate: 360, scale: 1.1 }}
@@ -330,17 +340,17 @@ const Activities = () => {
 
                 {/* Highlights */}
                 <motion.div 
-                  className="space-y-4 mb-8"
+                  className="space-y-2 mb-8"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.4 }}
                 >
-                  <h4 className="font-semibold text-gray-900 mb-4 text-xl">What's Included:</h4>
+                  <h4 className="font-semibold text-gray-900 text-xl">What's Included:</h4>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {selectedActivity.highlights.map((highlight, index) => (
                       <motion.div 
                         key={index}
-                        className="flex items-center space-x-3 p-3 bg-gray-50 rounded-xl"
+                        className="flex items-center space-x-3 bg-gray-50 rounded-xl"
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: 0.5 + index * 0.1 }}
