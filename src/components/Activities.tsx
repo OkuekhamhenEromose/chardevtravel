@@ -1,6 +1,8 @@
 import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence, useInView, Variants } from 'framer-motion';
 import { Mountain, Waves, Camera, Utensils, Compass, Plane, ArrowRight, Star, Sun } from 'lucide-react';
+import Activity1 from '../assets/images/travel3.jpg';
+import Activity2 from '../assets/images/travel2.jpg'
 
 const activities = [
   {
@@ -58,17 +60,17 @@ const activities = [
     name: 'Luxury Experiences',
     icon: Plane,
     description: 'Indulge in the finest luxury experiences with our premium offerings. From private yacht charters and helicopter tours to exclusive spa retreats and VIP access to world-class events, enjoy unparalleled comfort and sophistication.',
-    image: 'https://images.pexels.com/photos/1591061/pexels-photo-1591061.jpeg?auto=compress&cs=tinysrgb&w=800',
+    image: Activity1,
     highlights: ['Private Yacht Charters', 'Helicopter Tours', 'Luxury Spa Retreats', 'VIP Experiences'],
     color: 'from-indigo-500 to-purple-600',
     bgColor: 'from-indigo-50 to-purple-50'
   },
   {
-    id: 6,
-    name: 'Luxury Experiences',
+    id: 7,
+    name: 'Amazing Ectasy',
     icon: Sun,
     description: 'Indulge in the finest luxury experiences with our premium offerings. From private yacht charters and helicopter tours to exclusive spa retreats and VIP access to world-class events, enjoy unparalleled comfort and sophistication.',
-    image: 'https://images.pexels.com/photos/1591061/pexels-photo-1591061.jpeg?auto=compress&cs=tinysrgb&w=800',
+    image: Activity2,
     highlights: ['Private Yacht Charters', 'Helicopter Tours', 'Luxury Spa Retreats', 'VIP Experiences'],
     color: 'from-yellow-500 to-red-600',
     bgColor: 'from-yellow-50 to-red-50'
@@ -79,7 +81,8 @@ const Activities = () => {
   const [selectedActivity, setSelectedActivity] = useState(activities[0]);
   const [hoveredActivity, setHoveredActivity] = useState<number | null>(null);
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const isInView = useInView(ref, { once: false, margin: "-100px" });
+
 
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
@@ -131,7 +134,7 @@ const Activities = () => {
 
   return (
     <section className={`py-20 bg-gradient-to-br ${selectedActivity.bgColor} relative overflow-hidden transition-all duration-1000`} ref={ref}>
-      {/* Animated Background Elements */}
+{/* Animated Background Elements */}
       <motion.div
         className="absolute top-20 left-10 w-32 h-32 bg-white/10 rounded-full blur-3xl"
         animate={{
@@ -217,7 +220,7 @@ const Activities = () => {
                   onClick={() => setSelectedActivity(activity)}
                   onHoverStart={() => setHoveredActivity(activity.id)}
                   onHoverEnd={() => setHoveredActivity(null)}
-                  className={`w-full text-left p-6 rounded-2xl transition-all duration-500 transform relative overflow-hidden ${
+                  className={`w-full text-left p-6 rounded-2xl transition-all duration-500 cursor-pointer transform relative overflow-hidden ${
                     isSelected
                       ? `bg-gradient-to-r ${activity.color} text-white shadow-2xl scale-105`
                       : 'bg-white/80 backdrop-blur-sm text-gray-700 hover:bg-white shadow-lg hover:shadow-xl'
@@ -225,19 +228,6 @@ const Activities = () => {
                   whileHover={{ scale: isSelected ? 1.05 : 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
-                  {/* Background Pattern */}
-                  <motion.div
-                    className="absolute inset-0 opacity-10"
-                    initial={{ scale: 0, rotate: 0 }}
-                    animate={{ 
-                      scale: isSelected ? 1 : 0,
-                      rotate: isSelected ? 360 : 0
-                    }}
-                    transition={{ duration: 0.8 }}
-                  >
-                    <div className="w-full h-auto bg-white/20 rounded-full blur-3xl" />
-                  </motion.div>
-
                   <div className="flex items-center space-x-4 relative z-10">
                     <motion.div
                       className={`p-4 rounded-xl transition-all duration-300 ${

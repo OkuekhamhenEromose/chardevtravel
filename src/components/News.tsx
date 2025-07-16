@@ -1,4 +1,6 @@
 import { Calendar, ArrowRight } from 'lucide-react';
+import { motion, useInView, Variants } from 'framer-motion';
+import { useRef } from 'react';
 
 const newsArticles = [
   {
@@ -46,26 +48,116 @@ const newsArticles = [
 ];
 
 const News = () => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: false, margin: "-100px" });
+
+  // Header animations - from top
+  const headerVariants: Variants = {
+    hidden: { 
+      opacity: 0, 
+      y: -60,
+      scale: 0.9
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: {
+        duration: 0.8,
+        ease: "easeOut"
+      }
+    }
+  };
+
+  const headerContainerVariants: Variants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2,
+        delayChildren: 0.1
+      }
+    }
+  };
+
+  // Card animations - from right
+  const cardVariants: Variants = {
+    hidden: { 
+      opacity: 0, 
+      x: 100,
+      scale: 0.95
+    },
+    visible: {
+      opacity: 1,
+      x: 0,
+      scale: 1,
+      transition: {
+        delay: 0.3,
+        duration: 0.8,
+        ease: "easeOut"
+      }
+    }
+  };
+
+  const buttonVariants: Variants = {
+    hidden: { 
+      opacity: 0, 
+      y: 60,
+      scale: 0.9
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: {
+        delay: 1.2, // Appears after cards
+        duration: 0.8,
+        ease: "easeOut"
+      }
+    }
+  };
+
   return (
-    <section className="py-20 bg-gray-50">
+    <section className="py-20 bg-gray-50" ref={ref}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="text-center mb-8">
-          <h3 className="text-sky-500 font-semibold text-lg mb-2">Stay Informed</h3>
-          <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
+        <motion.div
+          variants={headerContainerVariants}
+          initial="hidden"
+          animate={isInView ? "visible" : "hidden"}
+          className="text-center mb-8"
+        >
+          <motion.h3 
+            variants={headerVariants}
+            className="text-sky-500 font-semibold text-lg mb-2"
+          >
+            Stay Informed
+          </motion.h3>
+          <motion.h2 
+            variants={headerVariants}
+            className="text-4xl lg:text-5xl font-bold text-gray-900 mb-4"
+          >
             News & Blog
-          </h2>
-          <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+          </motion.h2>
+          <motion.p 
+            variants={headerVariants}
+            className="text-gray-600 text-lg max-w-2xl mx-auto"
+          >
             Stay updated with the latest travel trends, tips, and destinations from our travel experts.
-          </p>
-        </div>
+          </motion.p>
+        </motion.div>
 
         {/* News Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {newsArticles.map((article) => (
-            <article
+          {newsArticles.map((article, index) => (
+            <motion.article
               key={article.id}
               className="group bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 cursor-pointer"
+              variants={cardVariants}
+              initial="hidden"
+              animate={isInView ? "visible" : "hidden"}
+              custom={index}
+              whileHover={{ y: -10 }}
             >
               {/* Image */}
               <div className="relative overflow-hidden">
@@ -95,16 +187,28 @@ const News = () => {
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </div>
               </div>
-            </article>
+            </motion.article>
           ))}
         </div>
 
         {/* View All Button */}
-        <div className="text-center mt-12">
-          <button className="bg-sky-500 hover:bg-sky-600 text-white px-8 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105">
+        <motion.div
+          className="text-center mt-12"
+          variants={buttonVariants}
+          initial="hidden"
+          animate={isInView ? "visible" : "hidden"}
+        >
+          <motion.button 
+            className="bg-sky-500 hover:bg-sky-600 text-white px-8 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105"
+            whileHover={{ 
+              scale: 1.05,
+              boxShadow: "0 10px 25px rgba(14, 165, 233, 0.3)"
+            }}
+            whileTap={{ scale: 0.98 }}
+          >
             View All Articles
-          </button>
-        </div>
+          </motion.button>
+        </motion.div>
       </div>
     </section>
   );

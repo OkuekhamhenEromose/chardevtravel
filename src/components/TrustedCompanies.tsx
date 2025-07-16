@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
+import { motion, useInView, Variants } from 'framer-motion';
 import Expedia from '../assets/images/Expedia-Logo-2010-removebg-preview.png';
 import Hotel from '../assets/images/Hotels.com-Logo.jpg';
 import TripAdvisor from '../assets/images/tripadvisor.png';
@@ -6,12 +7,41 @@ import Skyscanner from '../assets/images/Skyscanner-Logo-Vector.png';
 import Agoda from '../assets/images/Agoda_logo_2019.svg.png';
 
 // Improved Counter component that handles different formats
-
-
 interface CounterProps {
   value: string;
   duration?: number;
 }
+
+const companies = [
+  { 
+    name: 'Airbnb', 
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Airbnb_Logo_B%C3%A9lo.svg/2560px-Airbnb_Logo_B%C3%A9lo.svg.png' 
+  },
+  { 
+    name: 'Booking', 
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Booking.com_logo.svg/2560px-Booking.com_logo.svg.png' 
+  },
+  { 
+    name: 'Expedia', 
+    logo: Expedia
+  },
+  { 
+    name: 'TripAdvisor', 
+    logo: TripAdvisor
+  },
+  { 
+    name: 'Skyscanner', 
+    logo: Skyscanner 
+  },
+  { 
+    name: 'Hotels.com', 
+    logo: Hotel
+  },
+  { 
+    name: 'Agoda', 
+    logo: Agoda
+  }
+];
 
 const Counter = ({ value, duration = 2000 }: CounterProps) => {
   const [count, setCount] = useState(0);
@@ -60,52 +90,68 @@ const Counter = ({ value, duration = 2000 }: CounterProps) => {
   );
 };
 
-const companies = [
-  { 
-    name: 'Airbnb', 
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Airbnb_Logo_B%C3%A9lo.svg/2560px-Airbnb_Logo_B%C3%A9lo.svg.png' 
+// Animation variants for header elements (updated to match Contact.tsx)
+const headerVariants: Variants = {
+  hidden: { 
+    opacity: 0, 
+    y: -60,
+    scale: 0.9
   },
-  { 
-    name: 'Booking', 
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Booking.com_logo.svg/2560px-Booking.com_logo.svg.png' 
-  },
-  { 
-    name: 'Expedia', 
-    logo: Expedia
-  },
-  { 
-    name: 'TripAdvisor', 
-    logo: TripAdvisor
-  },
-  { 
-    name: 'Skyscanner', 
-    logo: Skyscanner 
-  },
-  { 
-    name: 'Hotels.com', 
-    logo: Hotel
-  },
-  { 
-    name: 'Agoda', 
-    logo: Agoda
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      duration: 0.8,
+      ease: "easeOut"
+    }
   }
-];
+};
+
+const headerContainerVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.2,
+      delayChildren: 0.1
+    }
+  }
+};
 
 const TrustedCompanies = () => {
-  // ... (keep all your existing imports and companies array)
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: false, margin: "-100px" });
 
   return (
-    <section className="py-20 bg-white border-y border-gray-100">
+    <section className="py-20 bg-white border-y border-gray-100" ref={ref}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h3 className="text-sky-500 font-semibold text-lg mb-2">Our Partners</h3>
-          <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
+        {/* Updated header with the same animation as Contact.tsx */}
+        <motion.div
+          variants={headerContainerVariants}
+          initial="hidden"
+          animate={isInView ? "visible" : "hidden"}
+          className="text-center mb-16"
+        >
+          <motion.h3 
+            variants={headerVariants}
+            className="text-sky-500 font-semibold text-lg mb-2"
+          >
+            Our Partners
+          </motion.h3>
+          <motion.h2 
+            variants={headerVariants}
+            className="text-4xl lg:text-5xl font-bold text-gray-900 mb-4"
+          >
             Trusted By Industry Leaders
-          </h2>
-          <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+          </motion.h2>
+          <motion.p 
+            variants={headerVariants}
+            className="text-gray-600 text-lg max-w-2xl mx-auto"
+          >
             We partner with the world's leading travel companies to bring you the best experiences.
-          </p>
-        </div>
+          </motion.p>
+        </motion.div>
 
         {/* Sliding Companies */}
         <div className="relative overflow-hidden">

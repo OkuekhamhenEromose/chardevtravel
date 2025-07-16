@@ -5,24 +5,19 @@ import travelImage from '../assets/images/travel4.jpg';
 
 const About = () => {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const isInView = useInView(ref, { once: false, margin: "-100px" });
 
-  const containerVariants: Variants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.3,
-        delayChildren: 0.2
-      }
-    }
-  };
-
-  const itemVariants: Variants = {
-    hidden: { opacity: 0, y: 60 },
+  // Header animations - from top (matches Contact.tsx)
+  const headerVariants: Variants = {
+    hidden: { 
+      opacity: 0, 
+      y: -60,
+      scale: 0.9
+    },
     visible: {
       opacity: 1,
       y: 0,
+      scale: 1,
       transition: {
         duration: 0.8,
         ease: "easeOut"
@@ -30,21 +25,59 @@ const About = () => {
     }
   };
 
+  const headerContainerVariants: Variants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2,
+        delayChildren: 0.1
+      }
+    }
+  };
+
+  // Content animations - from bottom (matches Contact.tsx)
+  const contentVariants: Variants = {
+    hidden: { 
+      opacity: 0, 
+      y: 80,
+      scale: 0.95
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: {
+        duration: 0.9,
+        ease: "easeOut",
+        delay: 0.4
+      }
+    }
+  };
+
   const imageVariants: Variants = {
-    hidden: { opacity: 0, scale: 0.8, rotateY: -15 },
+    hidden: { 
+      opacity: 0, 
+      scale: 0.8, 
+      rotateY: -15 
+    },
     visible: {
       opacity: 1,
       scale: 1,
       rotateY: 0,
       transition: {
         duration: 1,
-        ease: "easeOut"
+        ease: "easeOut",
+        delay: 0.3
       }
     }
   };
 
   const badgeVariants: Variants = {
-    hidden: { scale: 0, rotate: -180 },
+    hidden: { 
+      scale: 0, 
+      rotate: -180 
+    },
     visible: {
       scale: 1,
       rotate: 0,
@@ -58,7 +91,10 @@ const About = () => {
   };
 
   const featureVariants: Variants = {
-    hidden: { opacity: 0, x: -30 },
+    hidden: { 
+      opacity: 0, 
+      x: -30 
+    },
     visible: (i: number) => ({
       opacity: 1,
       x: 0,
@@ -95,10 +131,11 @@ const About = () => {
         className="absolute top-20 left-10 w-32 h-32 bg-sky-200/30 rounded-full blur-3xl"
         animate={{
           scale: [1, 1.2, 1],
-          opacity: [0.3, 0.5, 0.3]
+          opacity: [0.3, 0.5, 0.3],
+          x: [0, 20, 0]
         }}
         transition={{
-          duration: 4,
+          duration: 6,
           repeat: Infinity,
           ease: "easeInOut"
         }}
@@ -107,24 +144,59 @@ const About = () => {
         className="absolute bottom-20 right-10 w-40 h-40 bg-blue-200/30 rounded-full blur-3xl"
         animate={{
           scale: [1.2, 1, 1.2],
-          opacity: [0.5, 0.3, 0.5]
+          opacity: [0.5, 0.3, 0.5],
+          x: [0, -20, 0]
         }}
         transition={{
-          duration: 5,
+          duration: 8,
           repeat: Infinity,
           ease: "easeInOut"
         }}
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Header - Same animation pattern as Contact.tsx */}
         <motion.div
-          variants={containerVariants}
+          variants={headerContainerVariants}
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
-          className="grid lg:grid-cols-2 gap-16 items-center"
+          className="text-center mb-16"
         >
-          {/* Image Section */}
-          <motion.div variants={itemVariants} className="relative">
+          <motion.h3 
+            variants={headerVariants}
+            className="text-sky-500 font-semibold text-lg mb-2"
+          >
+            About Wanderlust
+          </motion.h3>
+          <motion.h2 
+            variants={headerVariants}
+            className="text-4xl lg:text-5xl font-bold text-gray-900 mb-4"
+          >
+            Your Journey, Our{' '}
+            <motion.span
+              className="text-transparent bg-clip-text bg-gradient-to-r from-sky-500 to-blue-600"
+              whileHover={{ scale: 1.05 }}
+              transition={{ duration: 0.3 }}
+            >
+              Passion
+            </motion.span>
+          </motion.h2>
+          <motion.p 
+            variants={headerVariants}
+            className="text-gray-600 text-lg max-w-2xl mx-auto"
+          >
+            For over 15 years, Wanderlust has been crafting extraordinary travel experiences.
+          </motion.p>
+        </motion.div>
+
+        <div className="grid lg:grid-cols-2 gap-16 items-center">
+          {/* Image Section - Animate when in view */}
+          <motion.div 
+            variants={contentVariants}
+            initial="hidden"
+            animate={isInView ? "visible" : "hidden"}
+            className="relative"
+          >
             <motion.div
               variants={imageVariants}
               className="relative"
@@ -139,7 +211,7 @@ const About = () => {
               <motion.div 
                 className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-3xl"
                 initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
+                animate={isInView ? { opacity: 1 } : { opacity: 0 }}
                 transition={{ delay: 0.5 }}
               />
             </motion.div>
@@ -157,7 +229,7 @@ const About = () => {
                 <motion.span 
                   className="text-3xl font-bold block"
                   initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
+                  animate={isInView ? { scale: 1 } : { scale: 0 }}
                   transition={{ delay: 1.5, type: "spring" }}
                 >
                   15+
@@ -170,7 +242,7 @@ const About = () => {
             <motion.div
               className="absolute top-8 left-8 bg-white/90 backdrop-blur-sm rounded-2xl p-4 shadow-lg"
               initial={{ opacity: 0, scale: 0.8, y: -20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
+              animate={isInView ? { opacity: 1, scale: 1, y: 0 } : { opacity: 0, scale: 0.8, y: -20 }}
               transition={{ delay: 1.2 }}
               whileHover={{ scale: 1.05 }}
             >
@@ -184,37 +256,18 @@ const About = () => {
             </motion.div>
           </motion.div>
 
-          {/* Content Section */}
-          <motion.div variants={itemVariants} className="space-y-4">
-            <div>
-              <motion.h3 
-                className="text-sky-500 font-semibold text-lg mb-2"
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.3 }}
-              >
-                About Wanderlust
-              </motion.h3>
-              <motion.h2 
-                className="text-3xl lg:text-4xl font-bold text-gray-900 leading-tight"
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 }}
-              >
-                Your Journey, Our{' '}
-                <motion.span
-                  className="text-transparent bg-clip-text bg-gradient-to-r from-sky-500 to-blue-600"
-                  whileHover={{ scale: 1.05 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  Passion
-                </motion.span>
-              </motion.h2>
-            </div>
-            
+          {/* Content Section - Animate when in view */}
+          <motion.div 
+            variants={contentVariants}
+            initial="hidden"
+            animate={isInView ? "visible" : "hidden"}
+            className="space-y-6"
+          >
             <motion.p 
-              className="text-gray-800 text-sm leading-relaxed"
-              variants={itemVariants}
+              className="text-gray-800 leading-relaxed"
+              initial={{ opacity: 0, y: 20 }}
+              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+              transition={{ delay: 0.3 }}
             >
               For over 15 years, Wanderlust has been crafting extraordinary travel experiences 
               that go beyond the ordinary. We believe that every journey should be a story worth 
@@ -222,17 +275,17 @@ const About = () => {
             </motion.p>
 
             {/* Features Section */}
-            <div className="space-y-1">
+            <div className="space-y-4">
               <motion.h4 
                 className="text-2xl font-bold text-gray-900"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.5 }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+                transition={{ delay: 0.4 }}
               >
                 Why Choose Us
               </motion.h4>
               
-              <div className="space-y-1">
+              <div className="space-y-4">
                 {features.map((feature, index) => {
                   const IconComponent = feature.icon;
                   return (
@@ -240,7 +293,9 @@ const About = () => {
                       key={index}
                       custom={index}
                       variants={featureVariants}
-                      className="flex items-start space-x-3 group"
+                      initial="hidden"
+                      animate={isInView ? "visible" : "hidden"}
+                      className="flex items-start space-x-4 group"
                       whileHover={{ x: 10 }}
                       transition={{ duration: 0.3 }}
                     >
@@ -264,7 +319,9 @@ const About = () => {
 
             <motion.button 
               className="bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-600 hover:to-blue-700 text-white px-8 py-4 rounded-full font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer"
-              variants={itemVariants}
+              initial={{ opacity: 0, y: 20 }}
+              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+              transition={{ delay: 0.6 }}
               whileHover={{ 
                 scale: 1.05,
                 boxShadow: "0 20px 40px rgba(14, 165, 233, 0.4)"
@@ -274,7 +331,7 @@ const About = () => {
               Learn More About Us
             </motion.button>
           </motion.div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

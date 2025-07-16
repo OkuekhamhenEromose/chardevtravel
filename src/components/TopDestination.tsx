@@ -64,7 +64,7 @@ const TopDestinations = () => {
   const [itemsPerPage, setItemsPerPage] = useState(3);
   const [likedDestinations, setLikedDestinations] = useState<number[]>([]);
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const isInView = useInView(ref, { once: false, margin: "-100px" });
 
   useEffect(() => {
     const handleResize = () => {
@@ -109,8 +109,8 @@ const TopDestinations = () => {
         : [...prev, destinationId]
     );
   };
-
-  const containerVariants = {
+  
+  const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
@@ -122,10 +122,15 @@ const TopDestinations = () => {
   };
 
   const headerVariants: Variants = {
-    hidden: { opacity: 0, y: 50 },
+    hidden: { 
+      opacity: 0, 
+      y: 50,
+      scale: 0.9
+    },
     visible: {
       opacity: 1,
       y: 0,
+      scale: 1,
       transition: {
         duration: 0.8,
         ease: "easeOut"
@@ -134,25 +139,47 @@ const TopDestinations = () => {
   };
 
   const slideVariants: Variants = {
-    enter: (direction: number) => ({
-      x: direction > 0 ? 1000 : -1000,
+    hidden: { 
       opacity: 0,
-    }),
-    center: {
-      x: 0,
+      x: 100,
+      scale: 0.95
+    },
+    visible: (direction: number) => ({
       opacity: 1,
+      x: 0,
+      scale: 1,
       transition: {
         duration: 0.7,
-        ease: "easeOut"
+        ease: "easeOut",
+        delay: 0.3
       }
-    },
+    }),
     exit: (direction: number) => ({
-      x: direction > 0 ? -1000 : 1000,
+      x: direction > 0 ? -100 : 100,
       opacity: 0,
+      scale: 0.95,
       transition: {
         duration: 0.5
       }
     })
+  };
+
+  const contentVariants: Variants = {
+    hidden: { 
+      opacity: 0,
+      y: 80,
+      scale: 0.9
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: {
+        duration: 0.8,
+        ease: "easeOut",
+        delay: 0.4
+      }
+    }
   };
 
   const visibleDestinations = getVisibleDestinations();
@@ -210,17 +237,17 @@ const TopDestinations = () => {
 
         {/* Auto-scrolling Destinations */}
         <motion.div 
+          variants={contentVariants}
+          initial="hidden"
+          animate={isInView ? "visible" : "hidden"}
           className="relative overflow-hidden bg-gradient-to-r from-sky-50/50 via-transparent to-blue-50/50 rounded-3xl p-8"
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, delay: 0.3 }}
         >
           {/* Auto-scroll indicator */}
           <motion.div 
             className="absolute top-4 left-1/2 transform -translate-x-1/2 z-10"
             initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1 }}
+            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: -20 }}
+            transition={{ delay: 0.5 }}
           >
             <motion.div 
               className="bg-white/90 backdrop-blur-sm px-6 py-3 rounded-full shadow-lg border border-white/20"
@@ -246,8 +273,8 @@ const TopDestinations = () => {
                 key={currentIndex}
                 custom={1} // Direction (1 for right-to-left)
                 variants={slideVariants}
-                initial="enter"
-                animate="center"
+                initial="hidden"
+                animate={isInView ? "visible" : "hidden"}
                 exit="exit"
                 className="absolute inset-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
               >
@@ -264,8 +291,8 @@ const TopDestinations = () => {
                         boxShadow: "0 25px 50px rgba(0,0,0,0.15)"
                       }}
                       initial={{ opacity: 0, y: 50 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: index * 0.1 }}
+                      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
+                      transition={{ delay: index * 0.1 + 0.6 }}
                     >
                       <div className="relative overflow-hidden h-72">
                         <motion.img
@@ -382,7 +409,7 @@ const TopDestinations = () => {
         <motion.div 
           className="mt-8"
           initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ delay: 1.5 }}
         >
           <div className="bg-gray-200 rounded-full h-2 max-w-md mx-auto overflow-hidden">
@@ -404,7 +431,7 @@ const TopDestinations = () => {
         <motion.div 
           className="text-center mt-8"
           initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
+          animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
           transition={{ delay: 2 }}
         >
           <motion.div 

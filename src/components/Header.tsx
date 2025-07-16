@@ -131,7 +131,7 @@ const Header = () => {
               whileHover={{ color: "#0ea5e9" }}
               transition={{ duration: 0.3 }}
             >
-              ChTravel
+              ChTravels
             </motion.span>
           </motion.div>
 

@@ -1,28 +1,43 @@
-import { motion, Variants } from 'framer-motion';
+import { motion, Variants, useInView } from 'framer-motion';
+import { useRef } from 'react';
 import { Mountain, Facebook, Instagram, Twitter, Linkedin, MapPin, Phone, Mail, Heart, ArrowUp } from 'lucide-react';
 import { HiArrowRight } from 'react-icons/hi';
 
 const Footer = () => {
+  const footerRef = useRef(null);
+  const isInView = useInView(footerRef, { once: false, margin: "-100px" });
+
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const containerVariants: Variants = {
-    hidden: { opacity: 0 },
+    hidden: { 
+      opacity: 0,
+      y: 60
+    },
     visible: {
       opacity: 1,
+      y: 0,
       transition: {
-        staggerChildren: 0.2,
-        delayChildren: 0.1
+        duration: 0.8,
+        ease: "easeOut",
+        staggerChildren: 0.15,
+        delayChildren: 0.2
       }
     }
   };
 
   const itemVariants: Variants = {
-    hidden: { opacity: 0, y: 30 },
+    hidden: { 
+      opacity: 0, 
+      y: 40,
+      scale: 0.95
+    },
     visible: {
       opacity: 1,
       y: 0,
+      scale: 1,
       transition: {
         duration: 0.6,
         ease: "easeOut"
@@ -30,53 +45,111 @@ const Footer = () => {
     }
   };
 
+  const imageVariants: Variants = {
+    hidden: { 
+      opacity: 0, 
+      x: 60, 
+      rotateY: 15,
+      scale: 0.9
+    },
+    visible: {
+      opacity: 1,
+      x: 0,
+      rotateY: 0,
+      scale: 1,
+      transition: {
+        duration: 0.9,
+        ease: "easeOut",
+        delay: 0.3
+      }
+    }
+  };
+
   const socialVariants: Variants = {
     hover: {
       scale: 1.2,
-      y: -5,
-      transition: { duration: 0.3 }
+      y: -8,
+      rotate: 5,
+      transition: { 
+        duration: 0.3,
+        type: "spring",
+        stiffness: 300
+      }
     }
   };
 
   const linkVariants: Variants = {
     hover: {
-      x: 5,
+      x: 8,
       color: "#0ea5e9",
       transition: { duration: 0.3 }
     }
   };
 
-  const fadeIn = (direction: string, delay: number) => ({
+  const newsletterVariants: Variants = {
     hidden: {
-      y: direction === 'up' ? 40 : direction === 'down' ? -40 : 0,
-      x: direction === 'left' ? 40 : direction === 'right' ? -40 : 0,
-      opacity: 0
+      opacity: 0,
+      y: -30,
+      scale: 0.95
     },
-    show: {
-      y: 0,
-      x: 0,
+    visible: {
       opacity: 1,
+      y: 0,
+      scale: 1,
       transition: {
-        type: 'tween',
-        duration: 0.8,
+        duration: 0.7,
+        ease: "easeOut",
+        staggerChildren: 0.2
+      }
+    }
+  };
+
+  const fadeInUp = (delay = 0): Variants => ({
+    hidden: {
+      opacity: 0,
+      y: 40,
+      scale: 0.95
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: {
+        duration: 0.6,
         delay,
-        ease: [0.25, 0.25, 0.25, 0.75]
+        ease: "easeOut"
       }
     }
   });
 
-  const textVariant = (delay: number) => ({
+  const fadeInLeft = (delay = 0): Variants => ({
     hidden: {
-      y: 50,
-      opacity: 0
+      opacity: 0,
+      x: -40
     },
-    show: {
-      y: 0,
+    visible: {
       opacity: 1,
+      x: 0,
       transition: {
-        type: 'spring',
-        duration: 1.25,
-        delay
+        duration: 0.6,
+        delay,
+        ease: "easeOut"
+      }
+    }
+  });
+
+  const fadeInRight = (delay = 0): Variants => ({
+    hidden: {
+      opacity: 0,
+      x: 40
+    },
+    visible: {
+      opacity: 1,
+      x: 0,
+      transition: {
+        duration: 0.6,
+        delay,
+        ease: "easeOut"
       }
     }
   });
@@ -103,10 +176,16 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white relative overflow-hidden">
+    <motion.footer 
+      ref={footerRef}
+      className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white relative overflow-hidden"
+      initial="hidden"
+      animate={isInView ? "visible" : "hidden"}
+    >
       {/* Background Elements */}
       <motion.div
         className="absolute top-0 left-0 w-96 h-96 bg-sky-500/10 rounded-full blur-3xl"
+        variants={fadeInLeft(0.1)}
         animate={{
           scale: [1, 1.2, 1],
           opacity: [0.1, 0.2, 0.1]
@@ -119,6 +198,7 @@ const Footer = () => {
       />
       <motion.div
         className="absolute bottom-0 right-0 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl"
+        variants={fadeInRight(0.2)}
         animate={{
           scale: [1.2, 1, 1.2],
           opacity: [0.2, 0.1, 0.2]
@@ -132,26 +212,27 @@ const Footer = () => {
 
       {/* Newsletter Section */}
       <motion.div 
-        variants={fadeIn('up', 0.2)}
-        initial="hidden"
-        whileInView="show"
+        variants={newsletterVariants}
         className="bg-blue-600 relative z-10"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
-          <div className="flex flex-col lg:flex-row items-center justify-between gap-8 md:gap-12">
+          <motion.div 
+            variants={containerVariants}
+            className="flex flex-col lg:flex-row items-center justify-between gap-8 md:gap-12"
+          >
             {/* Left Content */}
             <motion.div 
-              variants={fadeIn('right', 0.5)}
+              variants={fadeInRight(0.2)}
               className="text-white max-w-lg text-center md:text-left"
             >
               <motion.h2 
-                variants={textVariant(0.3)}
+                variants={fadeInUp(0.1)}
                 className="text-2xl sm:text-3xl md:text-4xl font-medium mb-4"
               >
                 Get Travel Updates
               </motion.h2>
               <motion.p 
-                variants={fadeIn('up', 0.6)}
+                variants={fadeInUp(0.2)}
                 className="text-blue-100 text-sm sm:text-base"
               >
                 Subscribe to our newsletter for exclusive deals, travel tips, and inspiration for your next adventure.
@@ -160,22 +241,25 @@ const Footer = () => {
 
             {/* Email Form */}
             <motion.div 
-              variants={fadeIn('left', 0.5)}
+              variants={fadeInLeft(0.3)}
               className="w-full md:w-auto"
             >
               <motion.div 
-                variants={fadeIn('up', 0.6)}
+                variants={containerVariants}
                 className="flex flex-col sm:flex-row gap-4 sm:gap-0"
               >
                 <motion.input
-                  variants={fadeIn('right', 0.7)}
+                  variants={fadeInRight(0.1)}
                   type="email"
                   placeholder="Enter your email address"
-                  className="w-full sm:w-auto md:w-80 px-4 sm:px-6 py-3 sm:py-4 rounded-xl sm:rounded-l-xl sm:rounded-r-none focus:outline-none focus:ring-2 focus:ring-sky-500 bg-white"
+                  className="w-full sm:w-auto md:w-80 px-4 sm:px-6 py-3 sm:py-4 rounded-xl sm:rounded-l-xl sm:rounded-r-none focus:outline-none focus:ring-2 focus:ring-sky-500 bg-white text-gray-900"
                 />
                 <motion.button 
-                  variants={fadeIn('left', 0.7)}
-                  whileHover={{ scale: 1.05 }}
+                  variants={fadeInLeft(0.2)}
+                  whileHover={{ 
+                    scale: 1.05,
+                    boxShadow: "0 10px 30px rgba(0,0,0,0.3)"
+                  }}
                   whileTap={{ scale: 0.95 }}
                   className="w-full sm:w-auto cursor-pointer bg-sky-500 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl sm:rounded-l-none sm:rounded-r-xl hover:bg-sky-600 transition-colors flex items-center justify-center sm:justify-start gap-2"
                 >
@@ -184,51 +268,59 @@ const Footer = () => {
                 </motion.button>
               </motion.div>
             </motion.div>
-          </div>
+          </motion.div>
         </div>
       </motion.div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 relative z-10">
         <motion.div
           variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
           className="grid lg:grid-cols-2 gap-12"
         >
           {/* Left Side - Company Info */}
           <motion.div variants={itemVariants} className="space-y-8">
             {/* Logo and Description */}
-            <div>
+            <motion.div variants={fadeInUp(0.1)}>
               <motion.div 
                 className="flex items-center space-x-3 mb-6"
                 whileHover={{ scale: 1.05 }}
                 transition={{ duration: 0.3 }}
               >
                 <motion.div
-                  whileHover={{ rotate: 360 }}
+                  whileHover={{ 
+                    rotate: 360,
+                    scale: 1.1
+                  }}
                   transition={{ duration: 0.8 }}
                 >
                   <Mountain className="w-10 h-10 text-sky-400" />
                 </motion.div>
-                <span className="text-3xl font-bold">ChTravel</span>
+                <motion.span 
+                  className="text-3xl font-bold"
+                  variants={fadeInLeft(0.2)}
+                >
+                  ChTravel
+                </motion.span>
               </motion.div>
               <motion.p 
                 className="text-gray-300 leading-relaxed max-w-md text-lg"
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                transition={{ delay: 0.3 }}
+                variants={fadeInUp(0.3)}
               >
                 Creating extraordinary travel experiences for over 15 years. We believe every journey should be a story worth telling, filled with authentic moments and breathtaking discoveries.
               </motion.p>
-            </div>
+            </motion.div>
 
             {/* Contact Info */}
             <motion.div 
               className="space-y-4"
-              variants={containerVariants}
+              variants={fadeInUp(0.4)}
             >
-              <h4 className="text-xl font-semibold mb-6 text-sky-400">Contact Information</h4>
+              <motion.h4 
+                className="text-xl font-semibold mb-6 text-sky-400"
+                variants={fadeInUp(0.1)}
+              >
+                Contact Information
+              </motion.h4>
               
               {[
                 { icon: MapPin, text: "123 Travel Street, Adventure City, AC 12345" },
@@ -239,13 +331,20 @@ const Footer = () => {
                 return (
                   <motion.div
                     key={index}
-                    variants={itemVariants}
+                    variants={fadeInLeft(index * 0.1)}
                     className="flex items-center space-x-4 group cursor-pointer"
-                    whileHover={{ x: 5 }}
+                    whileHover={{ 
+                      x: 10,
+                      transition: { duration: 0.3 }
+                    }}
                   >
                     <motion.div
                       className="w-12 h-12 bg-sky-500/20 rounded-lg flex items-center justify-center group-hover:bg-sky-500/30 transition-colors duration-300"
-                      whileHover={{ scale: 1.1, rotate: 5 }}
+                      whileHover={{ 
+                        scale: 1.15, 
+                        rotate: 10,
+                        boxShadow: "0 10px 25px rgba(14, 165, 233, 0.3)"
+                      }}
                     >
                       <IconComponent className="w-6 h-6 text-sky-400 flex-shrink-0" />
                     </motion.div>
@@ -258,9 +357,17 @@ const Footer = () => {
             </motion.div>
 
             {/* Social Media */}
-            <motion.div variants={itemVariants}>
-              <h4 className="text-xl font-semibold mb-6 text-sky-400">Follow Us</h4>
-              <div className="flex space-x-4">
+            <motion.div variants={fadeInUp(0.5)}>
+              <motion.h4 
+                className="text-xl font-semibold mb-6 text-sky-400"
+                variants={fadeInUp(0.1)}
+              >
+                Follow Us
+              </motion.h4>
+              <motion.div 
+                className="flex space-x-4"
+                variants={containerVariants}
+              >
                 {socialLinks.map((social, index) => {
                   const IconComponent = social.icon;
                   return (
@@ -268,47 +375,50 @@ const Footer = () => {
                       key={index}
                       href={social.href}
                       className={`bg-gray-800 p-4 rounded-xl transition-all duration-300 ${social.color} border border-gray-700 hover:border-transparent`}
-                      variants={socialVariants}
-                      whileHover="hover"
-                      whileTap={{ scale: 0.95 }}
+                      variants={fadeInUp(index * 0.1)}
+                      whileHover={{
+                        ...socialVariants.hover,
+                        boxShadow: "0 15px 35px rgba(0,0,0,0.4)"
+                      }}
+                      whileTap={{ scale: 0.9 }}
                     >
                       <IconComponent className="w-6 h-6" />
                     </motion.a>
                   );
                 })}
-              </div>
+              </motion.div>
             </motion.div>
           </motion.div>
 
           {/* Right Side - Image and Quick Links */}
           <motion.div 
-            variants={itemVariants}
+            variants={imageVariants}
             className="flex flex-col"
           >
             {/* Image */}
             <motion.div 
               className="relative h-full min-h-[400px] lg:min-h-[500px]"
-              whileHover={{ scale: 1.02 }}
-              transition={{ duration: 0.3 }}
+              whileHover={{ 
+                scale: 1.02,
+                transition: { duration: 0.4 }
+              }}
             >
               <motion.img
                 src="https://images.pexels.com/photos/2265876/pexels-photo-2265876.jpeg?auto=compress&cs=tinysrgb&w=600"
                 alt="Travel inspiration"
                 className="w-full h-full object-cover rounded-3xl shadow-2xl"
-                whileHover={{ scale: 1.05 }}
-                transition={{ duration: 0.6 }}
+                whileHover={{ 
+                  scale: 1.05,
+                  transition: { duration: 0.6 }
+                }}
               />
               <motion.div 
                 className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent rounded-3xl"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.5 }}
+                variants={fadeInUp(0.3)}
               />
               <motion.div 
                 className="absolute bottom-6 left-6 text-white"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.7 }}
+                variants={fadeInUp(0.5)}
               >
                 <h4 className="text-2xl font-bold mb-2">Start Your Journey Today</h4>
                 <p className="text-white/90 text-lg">The world is waiting for you.</p>
@@ -316,12 +426,18 @@ const Footer = () => {
             </motion.div>
 
             {/* Quick Links below the image on mobile */}
-            <div className="lg:hidden mt-8 grid grid-cols-2 gap-8">
-              <div>
+            <motion.div 
+              className="lg:hidden mt-8 grid grid-cols-2 gap-8"
+              variants={containerVariants}
+            >
+              <motion.div variants={fadeInLeft(0.1)}>
                 <h4 className="text-lg font-semibold mb-4 text-sky-400">Company</h4>
                 <ul className="space-y-3">
                   {quickLinks.map((link, index) => (
-                    <motion.li key={index} variants={itemVariants}>
+                    <motion.li 
+                      key={index}
+                      variants={fadeInUp(index * 0.1)}
+                    >
                       <motion.a
                         href={link.href}
                         className="text-gray-300 transition-colors duration-300 block"
@@ -333,12 +449,15 @@ const Footer = () => {
                     </motion.li>
                   ))}
                 </ul>
-              </div>
-              <div>
+              </motion.div>
+              <motion.div variants={fadeInRight(0.2)}>
                 <h4 className="text-lg font-semibold mb-4 text-sky-400">Services</h4>
                 <ul className="space-y-3">
                   {services.map((service, index) => (
-                    <motion.li key={index} variants={itemVariants}>
+                    <motion.li 
+                      key={index}
+                      variants={fadeInUp(index * 0.1)}
+                    >
                       <motion.a
                         href={service.href}
                         className="text-gray-300 transition-colors duration-300 block"
@@ -350,24 +469,29 @@ const Footer = () => {
                     </motion.li>
                   ))}
                 </ul>
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
           </motion.div>
         </motion.div>
 
         {/* Bottom Bar */}
         <motion.div
           className="border-t border-gray-800 mt-12 pt-8"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.8 }}
+          variants={fadeInUp(0.6)}
         >
-          <div className="flex flex-col md:flex-row justify-between items-center">
+          <motion.div 
+            className="flex flex-col md:flex-row justify-between items-center"
+            variants={containerVariants}
+          >
             <motion.p 
               className="text-gray-400 text-sm flex items-center"
-              whileHover={{ color: "#0ea5e9" }}
+              variants={fadeInLeft(0.1)}
+              whileHover={{ 
+                color: "#0ea5e9",
+                transition: { duration: 0.3 }
+              }}
             >
-              © 2025 ChTravel Travel Agency. Made with{' '}
+              © 2025 ChTravels Agency. Made with{' '}
               <motion.span
                 animate={{ scale: [1, 1.2, 1] }}
                 transition={{ duration: 1, repeat: Infinity }}
@@ -377,22 +501,26 @@ const Footer = () => {
               </motion.span>
               {' '}from CharDev.
             </motion.p>
-            <div className="flex space-x-6 mt-4 md:mt-0">
+            <motion.div 
+              className="flex space-x-6 mt-4 md:mt-0"
+              variants={containerVariants}
+            >
               {['Privacy Policy', 'Terms of Service', 'Cookie Policy'].map((link, index) => (
                 <motion.a
                   key={index}
                   href="#"
                   className="text-gray-400 hover:text-sky-400 text-sm transition-colors duration-300"
-                  whileHover={{ y: -2 }}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 1 + index * 0.1 }}
+                  variants={fadeInRight(index * 0.1)}
+                  whileHover={{ 
+                    y: -3,
+                    color: "#0ea5e9"
+                  }}
                 >
                   {link}
                 </motion.a>
               ))}
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         </motion.div>
       </div>
 
@@ -400,18 +528,17 @@ const Footer = () => {
       <motion.button
         className="fixed bottom-8 right-8 bg-gradient-to-r from-sky-500 to-blue-600 text-white p-4 rounded-full shadow-lg z-50"
         onClick={scrollToTop}
+        variants={fadeInUp(0.8)}
         whileHover={{ 
-          scale: 1.1,
+          scale: 1.15,
+          rotate: 5,
           boxShadow: "0 20px 40px rgba(14, 165, 233, 0.4)"
         }}
-        whileTap={{ scale: 0.9 }}
-        initial={{ opacity: 0, y: 100 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 1.5 }}
+        whileTap={{ scale: 0.85 }}
       >
         <ArrowUp className="w-6 h-6" />
       </motion.button>
-    </footer>
+    </motion.footer>
   );
 };
 

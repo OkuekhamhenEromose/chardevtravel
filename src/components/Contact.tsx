@@ -1,7 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { motion, useInView, Variants } from 'framer-motion';
 import { Calendar, MapPin, Phone, Mail, User, Send, CheckCircle } from 'lucide-react';
-import ContactImg from '../assets/images/travel5.jpg';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -14,7 +13,7 @@ const Contact = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const isInView = useInView(ref, { once: false, margin: "-100px" });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -47,7 +46,25 @@ const Contact = () => {
     }, 3000);
   };
 
-  const containerVariants: Variants = {
+  // Header animations - from top
+  const headerVariants: Variants = {
+    hidden: { 
+      opacity: 0, 
+      y: -60,
+      scale: 0.9
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: {
+        duration: 0.8,
+        ease: "easeOut"
+      }
+    }
+  };
+
+  const headerContainerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
@@ -58,49 +75,101 @@ const Contact = () => {
     }
   };
 
-  const headerVariants: Variants = {
-    hidden: { opacity: 0, y: 50 },
+  // Contact form animations - from top
+  const formVariants: Variants = {
+    hidden: { 
+      opacity: 0, 
+      y: -80,
+      scale: 0.95
+    },
     visible: {
       opacity: 1,
       y: 0,
+      scale: 1,
       transition: {
-        duration: 0.8,
-        ease: "easeOut"
+        duration: 0.9,
+        ease: "easeOut",
+        delay: 0.3
       }
     }
   };
 
-  const formVariants: Variants = {
-    hidden: { opacity: 0, x: -50 },
+  const formTitleVariants: Variants = {
+    hidden: { 
+      opacity: 0, 
+      y: -40
+    },
     visible: {
       opacity: 1,
-      x: 0,
+      y: 0,
       transition: {
-        duration: 0.8,
-        ease: "easeOut"
+        duration: 0.6,
+        ease: "easeOut",
+        delay: 0.5
+      }
+    }
+  };
+
+  // Image and contact info animations - from bottom
+  const imageVariants: Variants = {
+    hidden: { 
+      opacity: 0, 
+      y: 80,
+      scale: 0.9
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: {
+        duration: 0.9,
+        ease: "easeOut",
+        delay: 0.4
       }
     }
   };
 
   const contactInfoVariants: Variants = {
-    hidden: { opacity: 0, x: 50 },
+    hidden: { 
+      opacity: 0, 
+      y: 60,
+      scale: 0.95
+    },
     visible: {
       opacity: 1,
-      x: 0,
+      y: 0,
+      scale: 1,
       transition: {
         duration: 0.8,
-        ease: "easeOut"
+        ease: "easeOut",
+        delay: 0.6
+      }
+    }
+  };
+
+  const contactInfoTitleVariants: Variants = {
+    hidden: { 
+      opacity: 0, 
+      y: 40
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.6,
+        ease: "easeOut",
+        delay: 0.8
       }
     }
   };
 
   const inputVariants: Variants = {
-    hidden: { opacity: 0, y: 20 },
+    hidden: { opacity: 0, y: -30 },
     visible: (i: number) => ({
       opacity: 1,
       y: 0,
       transition: {
-        delay: 0.3 + i * 0.1,
+        delay: 0.7 + i * 0.1,
         duration: 0.5,
         ease: "easeOut"
       }
@@ -161,9 +230,9 @@ const Contact = () => {
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
+        {/* Header - Transitions from TOP */}
         <motion.div
-          variants={containerVariants}
+          variants={headerContainerVariants}
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
           className="text-center mb-16"
@@ -180,6 +249,7 @@ const Contact = () => {
           >
             Contact{' '}
             <motion.span
+              variants={headerVariants}
               className="text-transparent bg-clip-text bg-gradient-to-r from-sky-500 to-blue-600"
               whileHover={{ scale: 1.05 }}
               transition={{ duration: 0.3 }}
@@ -196,7 +266,7 @@ const Contact = () => {
         </motion.div>
 
         <div className="grid lg:grid-cols-2 gap-12 items-start">
-          {/* Contact Form */}
+          {/* Contact Form - Transitions from TOP */}
           <motion.div
             variants={formVariants}
             initial="hidden"
@@ -212,10 +282,10 @@ const Contact = () => {
               transition={{ duration: 0.3 }}
             >
               <motion.h3 
+                variants={formTitleVariants}
+                initial="hidden"
+                animate={isInView ? "visible" : "hidden"}
                 className="text-3xl font-bold text-gray-900 mb-8 text-center"
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
               >
                 Book Your Trip
               </motion.h3>
@@ -226,7 +296,7 @@ const Contact = () => {
                   custom={0}
                   variants={inputVariants}
                   initial="hidden"
-                  animate="visible"
+                  animate={isInView ? "visible" : "hidden"}
                 >
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Full Name
@@ -256,7 +326,7 @@ const Contact = () => {
                   custom={1}
                   variants={inputVariants}
                   initial="hidden"
-                  animate="visible"
+                  animate={isInView ? "visible" : "hidden"}
                 >
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Email Address
@@ -286,7 +356,7 @@ const Contact = () => {
                   custom={2}
                   variants={inputVariants}
                   initial="hidden"
-                  animate="visible"
+                  animate={isInView ? "visible" : "hidden"}
                 >
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Phone Number
@@ -316,7 +386,7 @@ const Contact = () => {
                   custom={3}
                   variants={inputVariants}
                   initial="hidden"
-                  animate="visible"
+                  animate={isInView ? "visible" : "hidden"}
                 >
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Preferred Destination
@@ -346,7 +416,7 @@ const Contact = () => {
                   custom={4}
                   variants={inputVariants}
                   initial="hidden"
-                  animate="visible"
+                  animate={isInView ? "visible" : "hidden"}
                 >
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Preferred Travel Date
@@ -380,9 +450,9 @@ const Contact = () => {
                     boxShadow: "0 20px 40px rgba(14, 165, 233, 0.4)"
                   }}
                   whileTap={{ scale: isSubmitting || isSubmitted ? 1 : 0.98 }}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.8 }}
+                  initial={{ opacity: 0, y: -20 }}
+                  animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: -20 }}
+                  transition={{ delay: 1.2, duration: 0.6 }}
                 >
                   {isSubmitting ? (
                     <>
@@ -409,21 +479,21 @@ const Contact = () => {
             </motion.div>
           </motion.div>
 
-          {/* Contact Information */}
+          {/* Contact Information - Image and "Get In Touch" from BOTTOM */}
           <motion.div 
             className="space-y-8"
-            variants={contactInfoVariants}
             initial="hidden"
             animate={isInView ? "visible" : "hidden"}
           >
-            {/* Contact Image */}
+            {/* Contact Image - from BOTTOM */}
             <motion.div 
+              variants={imageVariants}
               className="relative overflow-hidden rounded-3xl shadow-2xl"
               whileHover={{ scale: 1.02 }}
               transition={{ duration: 0.3 }}
             >
               <motion.img
-                src= {ContactImg}
+                src="https://images.pexels.com/photos/1371360/pexels-photo-1371360.jpeg?auto=compress&cs=tinysrgb&w=800"
                 alt="Contact us"
                 className="w-full h-64 object-cover"
                 whileHover={{ scale: 1.1 }}
@@ -432,22 +502,23 @@ const Contact = () => {
               <motion.div 
                 className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"
                 initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.3 }}
+                animate={isInView ? { opacity: 1 } : { opacity: 0 }}
+                transition={{ delay: 0.7, duration: 0.6 }}
               />
               <motion.div 
                 className="absolute bottom-6 left-6 text-white"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5 }}
+                initial={{ opacity: 0, y: 30 }}
+                animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+                transition={{ delay: 0.9, duration: 0.6 }}
               >
                 <h4 className="text-2xl font-bold mb-2">Let's Plan Your Adventure</h4>
                 <p className="text-white/90 text-lg">Our experts are ready to help you create unforgettable memories.</p>
               </motion.div>
             </motion.div>
 
-            {/* Contact Details */}
+            {/* Contact Details - "Get In Touch" from BOTTOM */}
             <motion.div 
+              variants={contactInfoVariants}
               className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-2xl p-8 border border-white/20"
               whileHover={{ 
                 scale: 1.02,
@@ -456,10 +527,10 @@ const Contact = () => {
               transition={{ duration: 0.3 }}
             >
               <motion.h4 
+                variants={contactInfoTitleVariants}
+                initial="hidden"
+                animate={isInView ? "visible" : "hidden"}
                 className="text-2xl font-bold text-gray-900 mb-8 text-center"
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
               >
                 Get In Touch
               </motion.h4>
@@ -472,9 +543,9 @@ const Contact = () => {
                     <motion.div
                       key={index}
                       className="flex items-center group cursor-pointer"
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.4 + index * 0.1 }}
+                      initial={{ opacity: 0, y: 40 }}
+                      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
+                      transition={{ delay: 1.0 + index * 0.15, duration: 0.6 }}
                       whileHover={{ x: 5 }}
                     >
                       <motion.div
