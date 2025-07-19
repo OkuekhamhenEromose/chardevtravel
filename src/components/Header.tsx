@@ -1,6 +1,14 @@
-import { useState, useEffect } from 'react';
-import { motion, AnimatePresence, Variants } from 'framer-motion';
-import { Facebook, Instagram, Twitter, Linkedin, Mountain, Menu, X } from 'lucide-react';
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence, Variants } from "framer-motion";
+import {
+  Facebook,
+  Instagram,
+  Twitter,
+  Linkedin,
+  Mountain,
+  Menu,
+  X,
+} from "lucide-react";
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -11,49 +19,49 @@ const Header = () => {
       setIsScrolled(window.scrollY > 50);
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const headerVariants: Variants = {
     initial: { y: -100, opacity: 0 },
-    animate: { 
-      y: 0, 
+    animate: {
+      y: 0,
       opacity: 1,
-      transition: { duration: 0.6, ease: "easeOut" }
-    }
+      transition: { duration: 0.6, ease: "easeOut" },
+    },
   };
 
   const logoVariants: Variants = {
     initial: { scale: 0, rotate: -180 },
-    animate: { 
-      scale: 1, 
+    animate: {
+      scale: 1,
       rotate: 0,
-      transition: { duration: 0.8, ease: "easeOut", delay: 0.2 }
+      transition: { duration: 0.8, ease: "easeOut", delay: 0.2 },
     },
-    hover: { 
-      scale: 1.1, 
+    hover: {
+      scale: 1.1,
       rotate: 5,
-      transition: { duration: 0.3 }
-    }
+      transition: { duration: 0.3 },
+    },
   };
 
   const socialVariants: Variants = {
     initial: { x: 50, opacity: 0 },
-    animate: { 
-      x: 0, 
+    animate: {
+      x: 0,
       opacity: 1,
-      transition: { duration: 0.6, ease: "easeOut", delay: 0.4 }
-    }
+      transition: { duration: 0.6, ease: "easeOut", delay: 0.4 },
+    },
   };
 
   const socialItemVariants: Variants = {
-    hover: { 
-      scale: 1.2, 
+    hover: {
+      scale: 1.2,
       y: -3,
-      transition: { duration: 0.2 }
+      transition: { duration: 0.2 },
     },
-    tap: { scale: 0.95 }
+    tap: { scale: 0.95 },
   };
 
   const mobileMenuVariants: Variants = {
@@ -62,17 +70,17 @@ const Header = () => {
       height: 0,
       transition: {
         duration: 0.3,
-        ease: "easeInOut"
-      }
+        ease: "easeInOut",
+      },
     },
     open: {
       opacity: 1,
       height: "auto",
       transition: {
         duration: 0.3,
-        ease: "easeInOut"
-      }
-    }
+        ease: "easeInOut",
+      },
+    },
   };
 
   const menuItemVariants: Variants = {
@@ -82,17 +90,17 @@ const Header = () => {
       opacity: 1,
       transition: {
         delay: i * 0.1,
-        duration: 0.3
-      }
-    })
+        duration: 0.3,
+      },
+    }),
   };
 
   const navigationItems = [
-    { name: 'Home', href: '#home' },
-    { name: 'About', href: '#about' },
-    { name: 'Destinations', href: '#destinations' },
-    { name: 'Services', href: '#services' },
-    { name: 'Contact', href: '#contact' }
+    { name: "Home", href: "#home" },
+    { name: "About", href: "#about" },
+    { name: "Destinations", href: "#destinations" },
+    { name: "Services", href: "#services" },
+    { name: "Contact", href: "#contact" },
   ];
 
   return (
@@ -101,15 +109,13 @@ const Header = () => {
       initial="initial"
       animate="animate"
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        isScrolled 
-          ? 'backdrop-blur-lg shadow-lg bg-white/80' 
-          : 'bg-transparent'
+        isScrolled ? "backdrop-blur-lg shadow-lg bg-white/80" : "bg-transparent"
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center py-4">
           {/* Logo */}
-          <motion.div 
+          <motion.div
             variants={logoVariants}
             initial="initial"
             animate="animate"
@@ -120,15 +126,17 @@ const Header = () => {
               whileHover={{ rotate: 360 }}
               transition={{ duration: 0.6 }}
             >
-              <Mountain className={`w-8 h-8 transition-colors duration-500 ${
-                isScrolled ? 'text-sky-600' : 'text-white'
-              }`} />
+              <Mountain
+                className={`w-8 h-8 transition-colors duration-500 ${
+                  isScrolled ? "text-sky-900" : "text-white"
+                }`}
+              />
             </motion.div>
-            <motion.span 
+            <motion.span
               className={`text-2xl font-bold transition-colors duration-500 ${
-                isScrolled ? 'text-gray-800' : 'text-white'
+                isScrolled ? "text-gray-800" : "text-white"
               }`}
-              whileHover={{ color: "#0ea5e9" }}
+              whileHover={{ color: "#0C4A6E" }}
               transition={{ duration: 0.3 }}
             >
               ChTravels
@@ -142,14 +150,16 @@ const Header = () => {
                 key={item.name}
                 href={item.href}
                 className={`font-bold transition-colors duration-500 relative ${
-                  isScrolled ? 'text-gray-700 hover:text-sky-600' : 'text-white hover:text-sky-300'
+                  isScrolled
+                    ? "text-gray-700 hover:text-sky-600"
+                    : "text-white hover:text-sky-950"
                 }`}
                 whileHover={{ y: -2 }}
                 initial={{ opacity: 0, y: 20 }}
-                animate={{ 
-                  opacity: 1, 
+                animate={{
+                  opacity: 1,
                   y: 0,
-                  transition: { delay: 0.6 + index * 0.1 }
+                  transition: { delay: 0.6 + index * 0.1 },
                 }}
               >
                 {item.name}
@@ -162,11 +172,11 @@ const Header = () => {
               </motion.a>
             ))}
           </nav>
-          
+
           {/* Social Media Icons & Mobile Menu */}
           <div className="flex items-center space-x-4">
             {/* Desktop Social Icons */}
-            <motion.div 
+            <motion.div
               variants={socialVariants}
               initial="initial"
               animate="animate"
@@ -180,9 +190,9 @@ const Header = () => {
                   whileHover="hover"
                   whileTap="tap"
                   className={`transition-colors duration-500 p-2 rounded-full ${
-                    isScrolled 
-                      ? 'text-gray-700 hover:text-sky-600 hover:bg-gray-100' 
-                      : 'text-white hover:text-sky-300 hover:bg-white/10'
+                    isScrolled
+                      ? "text-gray-700 hover:text-sky-600 hover:bg-gray-100"
+                      : "text-white hover:text-sky-900 hover:bg-white/10"
                   }`}
                 >
                   <Icon className="w-5 h-5" />
@@ -192,7 +202,7 @@ const Header = () => {
 
             {/* Mobile Menu Button */}
             <motion.button
-              className="md:hidden p-2 rounded-lg hover:bg-gray-100"
+              className="md:hidden p-2 rounded-lg hover:bg-sky-900 cursor-pointer"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               whileTap={{ scale: 0.95 }}
               initial={{ opacity: 0 }}
@@ -207,9 +217,11 @@ const Header = () => {
                     exit={{ rotate: 90, opacity: 0 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <X className={`w-6 h-6 ${
-                      isScrolled ? 'text-gray-700' : 'text-white'
-                    }`} />
+                    <X
+                      className={`w-6 h-6 ${
+                        isScrolled ? "text-gray-700" : "text-white"
+                      }`}
+                    />
                   </motion.div>
                 ) : (
                   <motion.div
@@ -219,9 +231,11 @@ const Header = () => {
                     exit={{ rotate: -90, opacity: 0 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <Menu className={`w-6 h-6 ${
-                      isScrolled ? 'text-gray-700' : 'text-white'
-                    }`} />
+                    <Menu
+                      className={`w-6 h-6 ${
+                        isScrolled ? "text-gray-700" : "text-white"
+                      }`}
+                    />
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -237,7 +251,7 @@ const Header = () => {
               initial="closed"
               animate="open"
               exit="closed"
-              className="md:hidden overflow-hidden bg-white/95 backdrop-blur-lg rounded-2xl mx-4 mb-4 shadow-xl"
+              className="md:hidden overflow-hidden fixed left-4 w-[calc(100%-32px)] bg-gray-900/70 backdrop-blur-[2px] rounded-2xl mb-4 shadow-xl"
             >
               <div className="py-6 px-6 space-y-4">
                 {navigationItems.map((item, index) => (
@@ -248,30 +262,32 @@ const Header = () => {
                     variants={menuItemVariants}
                     initial="closed"
                     animate="open"
-                    className="block text-gray-700 hover:text-sky-500 font-medium py-2 transition-colors duration-300"
+                    className="block text-white hover:text-sky-900 font-medium py-2 transition-colors duration-300"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     {item.name}
                   </motion.a>
                 ))}
-                
+
                 {/* Mobile Social Icons */}
-                <motion.div 
+                <motion.div
                   className="flex items-center space-x-4 pt-4 border-t border-gray-200"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1, transition: { delay: 0.5 } }}
                 >
-                  {[Facebook, Instagram, Twitter, Linkedin].map((Icon, index) => (
-                    <motion.a
-                      key={index}
-                      href="#"
-                      whileHover={{ scale: 1.2, y: -2 }}
-                      whileTap={{ scale: 0.95 }}
-                      className="text-gray-600 hover:text-sky-500 transition-colors duration-300 p-2 rounded-full hover:bg-sky-50"
-                    >
-                      <Icon className="w-5 h-5" />
-                    </motion.a>
-                  ))}
+                  {[Facebook, Instagram, Twitter, Linkedin].map(
+                    (Icon, index) => (
+                      <motion.a
+                        key={index}
+                        href="#"
+                        whileHover={{ scale: 1.2, y: -2 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="text-gray-600 hover:text-sky-900 transition-colors duration-300 p-2 rounded-full hover:bg-sky-50"
+                      >
+                        <Icon className="w-5 h-5" />
+                      </motion.a>
+                    )
+                  )}
                 </motion.div>
               </div>
             </motion.div>
